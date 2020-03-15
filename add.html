@@ -24,26 +24,6 @@
  </style>
 <body>
   <center>
-    <div class="a">
-      <div class="topnav topnav-inverse">
-        <a class="topnav-brand" href="/"> Login-Logout</a>
-      </div>
-    </div>
-    {% if user %}
-    <p>{{ welcome }} {{ user.email() }} welcome to the application</p>
-    <div class="nav">
-      <a href="#add">Add Element</a>
-      <a href="#search">Search Element</a>
-      </div>
-    </div>
-    {% else %}
-    <p>Welcome to the application </p>
-    <div class="nav">
-      <a href="#search">Search Element</a>
-      </div>
-    </div>
-    {% endif %}
-    <p>you can {{ url_string }} <a href='{{ url }}'>here</a></p>
   </center>
 </body>
 </html>

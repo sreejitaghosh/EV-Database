@@ -4,6 +4,7 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 import os
 from user import MyUser
+from attribute import atti
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname("E:\\GCD\\Sem 2\\Cloud Computing\\EV DATABASE\\")),
@@ -46,7 +47,7 @@ class MainPage(webapp2.RequestHandler):
 
         }
 
-        template = JINJA_ENVIRONMENT.get_template('ev.html')
+        template = JINJA_ENVIRONMENT.get_template('add.html')
         self.response.write(template.render(template_values))
 
 app = webapp2.WSGIApplication([
