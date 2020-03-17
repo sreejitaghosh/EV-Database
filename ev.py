@@ -4,6 +4,7 @@ from google.appengine.api import users
 from google.appengine.ext import ndb
 import os
 from user import MyUser
+from add import add
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname("E:\\GCD\\Sem 2\\Cloud Computing\\EV DATABASE\\")),
@@ -52,5 +53,4 @@ class MainPage(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/add', add),
-    ('/search', search),
 ], debug=True)

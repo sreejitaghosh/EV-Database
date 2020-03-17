@@ -12,10 +12,9 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True
 )
 
-class MainPage(webapp2.RequestHandler):
+class add(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
-
         url_string = ''
         url = ''
         add = ''
@@ -40,18 +39,17 @@ class MainPage(webapp2.RequestHandler):
             url = users.create_login_url(self.request.uri)
             url_string = 'login'
 
-        template_values = {
-             'url' : url,
-             'url_string' : url_string,
-             'user' : user,
+    
 
+        template_values = {
+                'url' : url,
+                'url_string' : url_string,
+                'myuser' : myuser
         }
 
         template = JINJA_ENVIRONMENT.get_template('add.html')
         self.response.write(template.render(template_values))
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage),
     ('/add', add),
-    ('/search', search),
 ], debug=True)
