@@ -42,6 +42,8 @@
       <a href="/search"><u>Search Element</u></a>
       </div>
     </div>
+    <br>
+    <form action='/add' method='post'>
     <table>
       <caption>Add Product Details</caption>
       <tr>
@@ -54,7 +56,7 @@
       </tr>
       <tr>
         <td>Year:</td>
-        <td><input type='number' name='atti_year'/required></td>
+        <td><input type='number' name='atti_year' /required></td>
       </tr>
       <tr>
         <td>Battery Size (Kwh):</td>
@@ -72,9 +74,18 @@
         <td>Power (Kw):</td>
         <td><input type='number' name='atti_power' /required></td>
       </tr>
+      <tr>
+        <td><input type="submit" value="add" id="addButton" name="Add"></td>
+      </tr>
+      <tr>
+        <td><input type="reset" value="reset" id="reset" name="Reset"></td>
+      </tr>
     </table>
+  </form>
+  </br>
     {% endif %}
     <p>you can {{ url_string }} <a href='{{ url }}'>here</a></p>
+
   </center>
 </body>
 </html>
