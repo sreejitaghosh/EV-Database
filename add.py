@@ -15,12 +15,11 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 class add(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
+
         url_string = ''
         url = ''
         add = ''
         search = ''
-        status = 0
-
         user = users.get_current_user()
 
         if user:
@@ -38,12 +37,12 @@ class add(webapp2.RequestHandler):
         else:
             url = users.create_login_url(self.request.uri)
             url_string = 'login'
+            self.redirect('/')
 
         template_values = {
                 'url' : url,
                 'url_string' : url_string,
-                'myuser' : myuser,
-                'note' : status,
+                'user' : user
         }
 
         template = JINJA_ENVIRONMENT.get_template('add.html')
@@ -51,12 +50,11 @@ class add(webapp2.RequestHandler):
 
     def post(self):
         self.response.headers['Content-Type'] = 'text/html'
+
         url_string = ''
         url = ''
         add = ''
         search = ''
-        status = 0
-
         user = users.get_current_user()
 
         if user:
@@ -74,6 +72,7 @@ class add(webapp2.RequestHandler):
         else:
             url = users.create_login_url(self.request.uri)
             url_string = 'login'
+            self.redirect('/')
 
         AttributeChecking = atti.query(
         atti.atti_name == self.request.get('atti_name'),
@@ -91,20 +90,11 @@ class add(webapp2.RequestHandler):
             add_b.atti_cost = int(self.request.get('atti_cost'))
             add_b.atti_power = int(self.request.get('atti_power'))
             add_b.put()
-            status = 1
-            print 'add'
-            print status
-
-        else:
-            status = 2
-            print 'Exists'
-            print status
 
         template_values = {
                 'url' : url,
                 'url_string' : url_string,
-                'myuser' : myuser,
-                'note' : status,
+                'user' : user
         }
 
         template = JINJA_ENVIRONMENT.get_template('add.html')

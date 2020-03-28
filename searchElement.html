@@ -1,0 +1,58 @@
+<html>
+ <head>
+   <title>Login-Logout</title>
+   <link rel="stylesheet" type="text/css" href="mystyle.css">
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+ </head>
+ <style>
+  .topnav {
+    overflow: hidden;
+    background-color: #f0fff0;
+  }
+  .topnav a {
+    width: 100%;
+    display: inline-block;
+    color: blue;
+    text-align: center;
+    padding: 17px 19px;
+    text-decoration: Arial;
+    font-size: 20px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+  }
+ </style>
+<body>
+  <center>
+    <div class="a">
+      <div class="topnav topnav-inverse">
+        <a class="topnav-brand" href="/"> Login-Logout</a>
+      </div>
+    </div>
+    {% if user %}
+    <p>{{ welcome }} {{ user.email() }} welcome to the application</p>
+    <div class="nav">
+      <a href="/add"><u>Add Element</u></a>
+      <a href="/search"><u>Search Element</u></a>
+      </div>
+    </div>
+    {% else %}
+    <p>Welcome to the application </p>
+    <div class="nav">
+      <a href="/search"><u>Search Element</u></a>
+      </div>
+    </div>
+    {% endif %}
+    <p>you can {{ url_string }} <a href='{{ url }}'>here</a></p>
+    <hr>
+    Welcome to Search Result Page. Click on each to view in more details.
+    <hr>
+    {% for value in Search_Data %}
+      <a href="/searchElementDetails" name="SearchElementHeading" value='{{ value.atti_name }}{{ value.atti_manufacture }}{{ value.atti_year }}'>
+        Name : {{ value.atti_name }} & Manufacturer : {{ value.atti_manufacture }}
+      </a>
+      <br>
+    {% endfor %}
+  </center>
+</body>
+</html>
