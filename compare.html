@@ -1,0 +1,102 @@
+<html>
+ <head>
+   <title>Login-Logout</title>
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   <script>
+     function checkboxcount()
+     {
+       var checkboxinput = document.getElementsByName("checkboxdata"),
+       count = 0;
+       for(i=0;i<checkboxinput.length;i++)
+       {
+         if(checkboxinput[i].type == "checkbox" && checkboxinput[i].checked == true)
+         {
+           count++;
+         }
+       }
+       if(count>=2)
+       {
+         return true;
+       }
+       else
+       {
+         alert("Please select 2 products to compare.");
+         return false;
+       }
+       return false;
+     }
+   </script>
+ </head>
+ <style>
+  .topnav {
+    overflow: hidden;
+    background-color: #f0fff0;
+  }
+  .topnav a {
+    width: 100%;
+    display: inline-block;
+    color: blue;
+    text-align: center;
+    padding: 17px 19px;
+    text-decoration: Arial;
+    font-size: 20px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+  }
+ </style>
+<body>
+  <center>
+    <div class="a">
+      <div class="topnav topnav-inverse">
+        <a class="topnav-brand" href="/"> Login-Logout</a>
+      </div>
+    </div>
+    {% if user %}
+    <p>{{ welcome }} {{ user.email() }} welcome to the application</p>
+    <div class="nav">
+      <a href="/add"><u>Add Element</u></a>
+      <a href="/search"><u>Search Element</u></a>
+      <a href="/compare"><u>Compare Element</u></a>
+      </div>
+    </div>
+    {% else %}
+    <p>Welcome to the application </p>
+    <div class="nav">
+      <a href="/search"><u>Search Element</u></a>
+      <a href="/compare"><u>Compare Element</u></a>
+      </div>
+    </div>
+    {% endif %}
+    <br>
+    <form action='/compareElements' method='post'>
+      <table>
+        <caption>Compare Product Details</caption>
+        <tr>
+          <td style="width:150px">Products</td>
+          <td>Choose Products</td>
+        </tr>
+        {% for value in Compare_Data %}
+          <tr>
+            <td>
+              <a href="/editDelete?atti_name={{ value.atti_name }}&atti_manufacture={{ value.atti_manufacture }}&atti_year={{ value.atti_year }}" name="SearchElementHeading">
+                Name : {{ value.atti_name }} & Manufacturer : {{ value.atti_manufacture }}
+              </a>
+            </td>
+            <td>
+              <input type='checkbox' name='checkboxdata' value='{{ value.atti_name }}{{ value.atti_manufacture }}{{ value.atti_year }}'/>
+            </td>
+          </tr>
+          <tr><td><br></td></tr>
+        {% endfor %}
+        <tr>
+          <td><input type="submit" value="compare" id="compareButton" name="Compare" onclick="checkboxcount()"></td>
+          <td><input type="reset" value="reset" id="reset" name="Reset"></td>
+        </tr>
+      </table>
+  </form>
+  </br>
+    <p>you can {{ url_string }} <a href='{{ url }}'>here</a></p>
+  </center>
+</body>
+</html>

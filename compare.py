@@ -8,7 +8,7 @@ from add import add
 from search import search
 from searchElement import Element
 from editDelete import editDelete
-from compare import compare
+from attribute import atti
 from compareElements import compareElements
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -17,7 +17,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True
 )
 
-class MainPage(webapp2.RequestHandler):
+class compare(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
 
@@ -44,21 +44,18 @@ class MainPage(webapp2.RequestHandler):
             url = users.create_login_url(self.request.uri)
             url_string = 'login'
 
+        Comparision_Data = atti.query()
+
         template_values = {
              'url' : url,
              'url_string' : url_string,
-             'user' : user
+             'user' : user,
+             'Compare_Data' : Comparision_Data
         }
 
-        template = JINJA_ENVIRONMENT.get_template('ev.html')
+        template = JINJA_ENVIRONMENT.get_template('compare.html')
         self.response.write(template.render(template_values))
 
 app = webapp2.WSGIApplication([
-    ('/', MainPage),
-    ('/add', add),
-    ('/search', search),
-    ('/searchElement', Element),
-    ('/editDelete', editDelete),
-    ('/compare', compare),
-    ('/compareElements', compareElements)
+    ('/compare', compare)
 ], debug=True)
