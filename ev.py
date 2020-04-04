@@ -7,6 +7,7 @@ from user import MyUser
 from add import add
 from search import search
 from searchElement import Element
+from editDelete import editDelete
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname("E:\\GCD\\Sem 2\\Cloud Computing\\EV DATABASE\\")),
@@ -53,5 +54,6 @@ app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/add', add),
     ('/search', search),
-    ('/searchElement', Element)
+    ('/searchElement', Element),
+    ('/editDelete', editDelete)
 ], debug=True)

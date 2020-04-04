@@ -32,6 +32,7 @@ class Element(webapp2.RequestHandler):
             if myuser == None:
                 welcome = 'Welcome to the application'
                 myuser = MyUser(id=user.user_id())
+                myuser.email_address = user.email()
                 myuser.put()
 
         else:
@@ -47,8 +48,8 @@ class Element(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('searchElement.html')
         self.response.write(template.render(template_values))
 
-    def isEmptyOrNullorZero(self, Check_Value):
-        if Check_Value == '' or Check_Value == None or Check_Value == 0:
+    def isEmpty(self, Check_Value):
+        if Check_Value == '':
             return True
         else:
             return False
@@ -70,6 +71,7 @@ class Element(webapp2.RequestHandler):
             if myuser == None:
                 welcome = 'Welcome to the application'
                 myuser = MyUser(id=user.user_id())
+                myuser.email_address = user.email()
                 myuser.put()
         else:
             url = users.create_login_url(self.request.uri)
@@ -89,40 +91,99 @@ class Element(webapp2.RequestHandler):
         Atti_power_to = self.request.get('atti_power_to')
 
         Raw_Data = atti.query()
-        Data = ''
-        if self.isEmptyOrNullorZero(Atti_Name) != True:
-            Data = Raw_Data.filter(atti.atti_name == Atti_Name)
 
-        if self.isEmptyOrNullorZero(Atti_Manufacture) != True:
-            Data = Raw_Data.filter(atti.atti_manufacture == Atti_Manufacture)
+        if self.isEmpty(Atti_Name) != True and self.isEmpty(Atti_Manufacture) != True and self.isEmpty(Atti_Year_From) != True and self.isEmpty(Atti_Year_To) != True:
+            Atti_Year_From = int(Atti_Year_From)
+            Atti_Year_To = int(Atti_Year_To)
+            Data_Query1 = Raw_Data.filter(atti.atti_name == Atti_Name and atti.atti_manufacture == Atti_Manufacture and atti.atti_year >= Atti_Year_From)
+            Data_Query2 = Raw_Data.filter(atti.atti_name == Atti_Name and atti.atti_manufacture == Atti_Manufacture and atti.atti_year <= Atti_Year_To)
+            Data_Query1 = Data_Query1.fetch(keys_only=True)
+            Data_Query2 = Data_Query2.fetch(keys_only=True)
+            Data = ndb.get_multi(set(Data_Query1).intersection(Data_Query2))
 
-        if self.isEmptyOrNullorZero(Atti_Year_From) != True:
-            Data = Raw_Data.filter(atti.atti_year >= int(Atti_Year_From))
-        if self.isEmptyOrNullorZero(Atti_Year_To) != True:
-            Data = Raw_Data.filter(atti.atti_year <= int(Atti_Year_To))
+        elif self.isEmpty(Atti_Name) != True and self.isEmpty(Atti_Manufacture) != True:
+            Data_Query = Raw_Data.filter(atti.atti_name == Atti_Name and atti.atti_manufacture == Atti_Manufacture)
+            Data = Data_Query.fetch()
 
-        if self.isEmptyOrNullorZero(Atti_battery_size_from) != True:
-            Data = Raw_Data.filter(atti.atti_battery_size >= int(Atti_battery_size_from))
-        if self.isEmptyOrNullorZero(Atti_battery_size_to) != True:
-            Data = Raw_Data.filter(atti.atti_battery_size <= int(Atti_battery_size_to))
+        elif (self.isEmpty(Atti_Name) != True) and (self.isEmpty(Atti_Year_From) != True) and (self.isEmpty(Atti_Year_To) != True):
+            Atti_Year_From = int(Atti_Year_From)
+            Atti_Year_To = int(Atti_Year_To)
+            Data_Query1 = Raw_Data.filter(atti.atti_name == Atti_Name)
+            Data_Query2 = Raw_Data.filter(atti.atti_year <= Atti_Year_To)
+            Data_Query3 = Raw_Data.filter(atti.atti_year >= Atti_Year_From)
+            Data_Query1 = Data_Query1.fetch(keys_only=True)
+            Data_Query2 = Data_Query2.fetch(keys_only=True)
+            Data_Query3 = Data_Query3.fetch(keys_only=True)
+            Data = ndb.get_multi(set(Data_Query1).intersection(Data_Query2, Data_Query3))
 
-        if self.isEmptyOrNullorZero(Atti_WLTP_range_from) != True:
-            Data = Raw_Data.filter(atti.atti_WLTP_range >= int(Atti_WLTP_range_from))
-        if self.isEmptyOrNullorZero(Atti_WLTP_range_to) != True:
-            Data = Raw_Data.filter(atti.atti_WLTP_range <= int(Atti_WLTP_range_to))
+        elif (self.isEmpty(Atti_Manufacture) != True) and (self.isEmpty(Atti_Year_From) != True) and (self.isEmpty(Atti_Year_To) != True):
+            Atti_Year_From = int(Atti_Year_From)
+            Atti_Year_To = int(Atti_Year_To)
+            Data_Query1 = Raw_Data.filter(atti.atti_manufacture == Atti_Manufacture)
+            Data_Query2 = Raw_Data.filter(atti.atti_year >= Atti_Year_From)
+            Data_Query3 = Raw_Data.filter(atti.atti_year <= Atti_Year_To)
+            Data_Query1 = Data_Query1.fetch(keys_only=True)
+            Data_Query2 = Data_Query2.fetch(keys_only=True)
+            Data_Query3 = Data_Query3.fetch(keys_only=True)
+            Data = ndb.get_multi(set(Data_Query1).intersection(Data_Query2, Data_Query3))
 
-        if self.isEmptyOrNullorZero(Atti_cost_from) != True:
-            Data = Raw_Data.filter(atti.atti_cost >= int(Atti_cost_from))
-        if self.isEmptyOrNullorZero(Atti_cost_to) != True:
-            Data = Raw_Data.filter(atti.atti_cost <= int(Atti_cost_to))
+        elif self.isEmpty(Atti_Name) != True:
+            Data_Query = Raw_Data.filter(atti.atti_name == Atti_Name)
+            Data = Data_Query.fetch()
 
-        if self.isEmptyOrNullorZero(Atti_power_from) != True:
-            Data = Raw_Data.filter(atti.atti_power >= int(Atti_power_from))
-        if self.isEmptyOrNullorZero(Atti_power_to) != True:
-            Data = Raw_Data.filter(atti.atti_power <= int(Atti_power_to))
+        elif self.isEmpty(Atti_Manufacture) != True:
+            Data_Query = Raw_Data.filter(atti.atti_manufacture == Atti_Manufacture)
+            Data = Data_Query.fetch()
+
+        elif self.isEmpty(Atti_Year_From) != True and self.isEmpty(Atti_Year_To) != True:
+            Atti_Year_From = int(Atti_Year_From)
+            Atti_Year_To = int(Atti_Year_To)
+            Data_Query1 = Raw_Data.filter(atti.atti_year >= Atti_Year_From)
+            Data_Query2 = Raw_Data.filter(atti.atti_year <= Atti_Year_To)
+            Data_Query1 = Data_Query1.fetch(keys_only=True)
+            Data_Query2 = Data_Query2.fetch(keys_only=True)
+            Data = ndb.get_multi(set(Data_Query1).intersection(Data_Query2))
+        else:
+            Data = ''
+
+        if self.isEmpty(Atti_battery_size_from) != True and self.isEmpty(Atti_battery_size_to) != True:
+            Atti_battery_size_from = int(Atti_battery_size_from)
+            Atti_battery_size_to = int(Atti_battery_size_to)
+            Data_Query1 = Raw_Data.filter(atti.atti_battery_size >= int(Atti_battery_size_from))
+            Data_Query2 = Raw_Data.filter(atti.atti_battery_size <= int(Atti_battery_size_to))
+            Data_Query1 = Data_Query1.fetch(keys_only=True)
+            Data_Query2 = Data_Query2.fetch(keys_only=True)
+            Data = ndb.get_multi(set(Data_Query1).intersection(Data_Query2))
+
+        if self.isEmpty(Atti_WLTP_range_from) != True and self.isEmpty(Atti_WLTP_range_to) != True:
+            Atti_WLTP_range_from = int(Atti_WLTP_range_from)
+            Atti_WLTP_range_to = int(Atti_WLTP_range_to)
+            Data_Query1 = Raw_Data.filter(atti.atti_WLTP_range >= int(Atti_WLTP_range_from))
+            Data_Query2 = Raw_Data.filter(atti.atti_WLTP_range <= int(Atti_WLTP_range_to))
+            Data_Query1 = Data_Query1.fetch(keys_only=True)
+            Data_Query2 = Data_Query2.fetch(keys_only=True)
+            Data = ndb.get_multi(set(Data_Query1).intersection(Data_Query2))
+
+        if self.isEmpty(Atti_cost_from) != True and self.isEmpty(Atti_cost_to) != True:
+            Atti_cost_from = int(Atti_cost_from)
+            Atti_cost_to = int(Atti_cost_to)
+            Data_Query1 = Raw_Data.filter(atti.atti_cost >= int(Atti_cost_from))
+            Data_Query2 = Raw_Data.filter(atti.atti_cost <= int(Atti_cost_to))
+            Data_Query1 = Data_Query1.fetch(keys_only=True)
+            Data_Query2 = Data_Query2.fetch(keys_only=True)
+            Data = ndb.get_multi(set(Data_Query1).intersection(Data_Query2))
+
+        if self.isEmpty(Atti_power_from) != True and self.isEmpty(Atti_power_to) != True:
+            Atti_power_from = int(Atti_power_from)
+            Atti_power_to = int(Atti_power_to)
+            Data_Query1 = Raw_Data.filter(atti.atti_power >= int(Atti_power_from))
+            Data_Query2 = Raw_Data.filter(atti.atti_power <= int(Atti_power_to))
+            Data_Query1 = Data_Query1.fetch(keys_only=True)
+            Data_Query2 = Data_Query2.fetch(keys_only=True)
+            Data = ndb.get_multi(set(Data_Query1).intersection(Data_Query2))
 
         if len(Data) != 0:
-            Final_Data = Data.fetch()
+            Final_Data = Data
         else:
             Final_Data = Raw_Data.fetch()
 

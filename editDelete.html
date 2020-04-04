@@ -1,0 +1,112 @@
+<html>
+ <head>
+   <title>Login-Logout</title>
+   <link rel="stylesheet" type="text/css" href="mystyle.css">
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+ </head>
+ <style>
+  .topnav {
+    overflow: hidden;
+    background-color: #f0fff0;
+  }
+  .topnav a {
+    width: 100%;
+    display: inline-block;
+    color: blue;
+    text-align: center;
+    padding: 17px 19px;
+    text-decoration: Arial;
+    font-size: 20px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+  }
+ </style>
+<body>
+  <center>
+    <div class="a">
+      <div class="topnav topnav-inverse">
+        <a class="topnav-brand" href="/"> Login-Logout</a>
+      </div>
+    </div>
+    {% if user %}
+    <p>{{ welcome }} {{ user.email() }} welcome to the application</p>
+    <div class="nav">
+      <a href="/add"><u>Add Element</u></a>
+      <a href="/search"><u>Search Element</u></a>
+      </div>
+    </div>
+    {% else %}
+    <p>Welcome to the application </p>
+    <div class="nav">
+      <a href="/search"><u>Search Element</u></a>
+      </div>
+    </div>
+    {% endif %}
+    <br>
+    <form action='/editDelete?atti_name={{ details.atti_name }}&atti_manufacture={{ details.atti_manufacture }}&atti_year={{ details.atti_year }}' method='post'>
+    <table>
+      <caption>Update or Delete Product Details</caption>
+      <tr>
+        <td><br></td>
+      </tr>
+      <tr>
+        <td>Name:</td>
+        <td><input type='text' name='atti_name_new' value='{{ details.atti_name }}'/required></td>
+      </tr>
+      <tr>
+        <td><br></td>
+      </tr>
+      <tr>
+        <td>Manufacture:</td>
+        <td><input type='text' name='atti_manufacture_new' value='{{ details.atti_manufacture }}'/required></td>
+      </tr>
+      <tr>
+        <td><br></td>
+      </tr>
+      <tr>
+        <td>Year:</td>
+        <td><input type='number' name='atti_year_new' value='{{ details.atti_year }}'/required></td>
+      </tr>
+      <tr>
+        <td><br></td>
+      </tr>
+      <tr>
+        <td>Battery Size (Kwh):</td>
+        <td><input type='number' name='atti_battery_size_new' value='{{ details.atti_battery_size }}'/required></td>
+      </tr>
+      <tr>
+        <td><br></td>
+      </tr>
+      <tr>
+        <td>WLTP Range (Km):</td>
+        <td><input type='number' name='atti_WLTP_range_new' value='{{ details.atti_WLTP_range }}'/required></td>
+      </tr>
+      <tr>
+        <td><br></td>
+      </tr>
+      <tr>
+        <td>Cost:</td>
+        <td><input type='number' name='atti_cost_new' value='{{ details.atti_cost }}'/required></td>
+      </tr>
+      <tr>
+        <td><br></td>
+      </tr>
+      <tr>
+        <td>Power (Kw):</td>
+        <td><input type='number' name='atti_power_new' value='{{ details.atti_power }}' /required></td>
+      </tr>
+      <tr>
+        <td><br></td>
+      </tr>
+      <tr>
+        <td><input type="submit" name="Button" value="Edit"></td>
+        <td><input type="submit" name="Button" value="Delete"></td>
+      </tr>
+    </table>
+  </form>
+  </br>
+    <p>you can {{ url_string }} <a href='{{ url }}'>here</a></p>
+  </center>
+</body>
+</html>

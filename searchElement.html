@@ -48,7 +48,7 @@
     Welcome to Search Result Page. Click on each to view in more details.
     <hr>
     {% for value in Search_Data %}
-      <a href="/searchElementDetails" name="SearchElementHeading" value='{{ value.atti_name }}{{ value.atti_manufacture }}{{ value.atti_year }}'>
+      <a href="/editDelete?atti_name={{ value.atti_name }}&atti_manufacture={{ value.atti_manufacture }}&atti_year={{ value.atti_year }}" name="SearchElementHeading">
         Name : {{ value.atti_name }} & Manufacturer : {{ value.atti_manufacture }}
       </a>
       <br>

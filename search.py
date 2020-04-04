@@ -32,6 +32,7 @@ class search(webapp2.RequestHandler):
             if myuser == None:
                 welcome = 'Welcome to the application'
                 myuser = MyUser(id=user.user_id())
+                myuser.email_address = user.email()
                 myuser.put()
 
         else:

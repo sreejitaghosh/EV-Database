@@ -12,7 +12,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True
 )
 
-class add(webapp2.RequestHandler):
+class editDelete(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
 
@@ -38,15 +38,23 @@ class add(webapp2.RequestHandler):
         else:
             url = users.create_login_url(self.request.uri)
             url_string = 'login'
-            self.redirect('/')
+
+
+        edit_atti_name = self.request.GET.get('atti_name')
+        edit_atti_manufacture = self.request.GET.get('atti_manufacture')
+        edit_atti_year = self.request.GET.get('atti_year')
+        atti_Key = edit_atti_name+''+edit_atti_manufacture+''+edit_atti_year
+        details = ndb.Key('atti', atti_Key)
+        details = details.get()
 
         template_values = {
                 'url' : url,
                 'url_string' : url_string,
-                'user' : user
+                'user' : user,
+                'details' : details
         }
 
-        template = JINJA_ENVIRONMENT.get_template('add.html')
+        template = JINJA_ENVIRONMENT.get_template('editDelete.html')
         self.response.write(template.render(template_values))
 
     def post(self):
@@ -74,34 +82,42 @@ class add(webapp2.RequestHandler):
         else:
             url = users.create_login_url(self.request.uri)
             url_string = 'login'
+
+        if user:
+            edit_atti_name = self.request.GET.get('atti_name')
+            edit_atti_manufacture = self.request.GET.get('atti_manufacture')
+            edit_atti_year = self.request.GET.get('atti_year')
+            atti_Key = edit_atti_name+''+edit_atti_manufacture+''+edit_atti_year
+
+            if self.request.get('Button') == 'Delete':
+                ndb.Key('atti', atti_Key).delete()
+                self.redirect('/')
+                add_b=''
+            else:
+                ndb.Key('atti', atti_Key).delete()
+                add_b = atti(id=self.request.get('atti_name_new')+""+self.request.get('atti_manufacture_new')+""+self.request.get('atti_year_new'))
+                add_b.atti_name = self.request.get('atti_name_new')
+                add_b.atti_manufacture = self.request.get('atti_manufacture_new')
+                add_b.atti_year = int(self.request.get('atti_year_new'))
+                add_b.atti_battery_size = int(self.request.get('atti_battery_size_new'))
+                add_b.atti_WLTP_range = int(self.request.get('atti_WLTP_range_new'))
+                add_b.atti_cost = int(self.request.get('atti_cost_new'))
+                add_b.atti_power = int(self.request.get('atti_power_new'))
+                add_b.put()
+        else:
+            add_b=''
             self.redirect('/')
-
-        AttributeChecking = atti.query(
-        atti.atti_name == self.request.get('atti_name'),
-        atti.atti_manufacture == self.request.get('atti_manufacture'),
-        atti.atti_year == int(self.request.get('atti_year'))
-        ).fetch()
-
-        if len(AttributeChecking) == 0:
-            add_b = atti(id=self.request.get('atti_name')+""+self.request.get('atti_manufacture')+""+self.request.get('atti_year'))
-            add_b.atti_name = self.request.get('atti_name')
-            add_b.atti_manufacture = self.request.get('atti_manufacture')
-            add_b.atti_year = int(self.request.get('atti_year'))
-            add_b.atti_battery_size = int(self.request.get('atti_battery_size'))
-            add_b.atti_WLTP_range = int(self.request.get('atti_WLTP_range'))
-            add_b.atti_cost = int(self.request.get('atti_cost'))
-            add_b.atti_power = int(self.request.get('atti_power'))
-            add_b.put()
 
         template_values = {
                 'url' : url,
                 'url_string' : url_string,
-                'user' : user
+                'user' : user,
+                'details' : add_b
         }
 
-        template = JINJA_ENVIRONMENT.get_template('add.html')
+        template = JINJA_ENVIRONMENT.get_template('editDelete.html')
         self.response.write(template.render(template_values))
 
 app = webapp2.WSGIApplication([
-    ('/add', add),
+    ('/editDelete', editDelete),
 ], debug=True)
