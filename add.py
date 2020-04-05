@@ -75,13 +75,12 @@ class add(webapp2.RequestHandler):
             url_string = 'login'
             self.redirect('/')
 
-        AttributeChecking = atti.query(
-        atti.atti_name == self.request.get('atti_name'),
-        atti.atti_manufacture == self.request.get('atti_manufacture'),
-        atti.atti_year == int(self.request.get('atti_year'))
-        ).fetch()
+        Add_Data_Key = self.request.get('atti_name')+""+self.request.get('atti_manufacture')+""+self.request.get('atti_year')
+        AttributeExists = ndb.Key('atti',Add_Data_Key).get()
 
-        if len(AttributeChecking) == 0:
+        if AttributeExists != None:
+            self.redirect('/')
+        else:
             add_b = atti(id=self.request.get('atti_name')+""+self.request.get('atti_manufacture')+""+self.request.get('atti_year'))
             add_b.atti_name = self.request.get('atti_name')
             add_b.atti_manufacture = self.request.get('atti_manufacture')

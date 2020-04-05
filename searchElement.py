@@ -21,7 +21,6 @@ class Element(webapp2.RequestHandler):
         add = ''
         search = ''
         user = users.get_current_user()
-
         if user:
             url = users.create_logout_url(self.request.uri)
             url_string = 'logout'

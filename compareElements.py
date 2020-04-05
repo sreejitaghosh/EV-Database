@@ -25,10 +25,8 @@ class compareElements(webapp2.RequestHandler):
         add = ''
         search = ''
         compare = ''
-
-
         user = users.get_current_user()
-
+S
         if user:
             url = users.create_logout_url(self.request.uri)
             url_string = 'logout'
@@ -118,8 +116,6 @@ class compareElements(webapp2.RequestHandler):
 
         template = JINJA_ENVIRONMENT.get_template('compareElements.html')
         self.response.write(template.render(template_values))
-
-
 
 app = webapp2.WSGIApplication([
     ('/compareElements', compareElements)
