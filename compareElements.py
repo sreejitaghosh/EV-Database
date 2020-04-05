@@ -26,7 +26,6 @@ class compareElements(webapp2.RequestHandler):
         search = ''
         compare = ''
         user = users.get_current_user()
-S
         if user:
             url = users.create_logout_url(self.request.uri)
             url_string = 'logout'
